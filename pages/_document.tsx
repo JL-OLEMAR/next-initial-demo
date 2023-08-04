@@ -1,9 +1,20 @@
-import { Html, Head, Main, NextScript } from 'next/document'
+import { Children } from 'react'
+import Document, { Html, Head, Main, NextScript, DocumentContext } from 'next/document'
+import type { NextPageContext } from 'next'
+import { CssBaseline } from '@nextui-org/react'
 
-export default function Document() {
+MyDocument.getInitialProps = async (ctx: NextPageContext) => {
+  const initialProps = await Document.getInitialProps(ctx as DocumentContext)
+  return {
+    ...initialProps,
+    styles: Children.toArray([initialProps.styles])
+  }
+}
+
+export default function MyDocument() {
   return (
-    <Html lang='en'>
-      <Head />
+    <Html lang='es'>
+      <Head>{CssBaseline.flush()}</Head>
       <body>
         <Main />
         <NextScript />

@@ -1,8 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  experimental: {
-    outputStandalone: true
+  images: {
+    domains: ['raw.githubusercontent.com'] // It's not necessary to set the https protocol
   }
 }
 
