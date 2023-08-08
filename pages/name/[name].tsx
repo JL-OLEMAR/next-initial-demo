@@ -99,7 +99,8 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
       // Should return an object with params: { name: 'pikachu' }
       params: { name }
     })),
-    fallback: false // Return 404
+    // fallback: false // Return 404
+    fallback: 'blocking'// Return new page if the pokemon is found or 404 isn't found
   }
 }
 
@@ -107,10 +108,19 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   // Obtener el id del array del contexto de los params
   const { name } = params as { name: string }
+  const pokemon = await getPokemonInfo(name)
+
+  if (pokemon == null) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false
+      }
+    }
+  }
 
   return {
-    props: {
-      pokemon: await getPokemonInfo(name)
-    }
+    props: { pokemon },
+    revalidate: 84600 // seconds === 24 hours
   }
 }
